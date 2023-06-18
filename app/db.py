@@ -23,6 +23,10 @@ class DatabaseManager:
     def create_table(self, table_name: str, columns: Dict[str, str]):
         """
         Create a new table in the database if it does not exist yet.
+
+        Args:
+            table_name: Name of the new table
+            columns: A dict mapping column_name to its corresponding type
         """
         typed_cols = [f"{col} {type_}" for col, type_ in columns.items()]
         statement = f"""
@@ -35,9 +39,9 @@ class DatabaseManager:
         """
         Add a new entry to the specified table.
 
-        Parameters:
-            table_name (str) : name of the table
-            entries (dict) : map of {'column_name': 'value'}
+        Args:
+            table_name: Name of the table
+            entries: A dict mapping column_name to its corresponding value
         """
         placeholders = f"({', '.join('?' * len(entries))})"
         col_names = ", ".join(entries.keys())
@@ -57,9 +61,9 @@ class DatabaseManager:
         For example, if the criteria is {'id': 1, 'name': 'alice'},
         then all entries with id = 1 and name = alice will be deleted.
 
-        Parameters:
-            table_name (str) : name of the table
-            criteria (dict) : conditions to be met
+        Args:
+            table_name: Name of the table
+            criteria: A dict mapping column name to its corresponding value
         """
         placeholders = [f'{col} = ?' for col in criteria.keys()]
         delete_criteria = " AND ".join(placeholders)
@@ -77,11 +81,11 @@ class DatabaseManager:
         Select entries from the specified table which matches
         the specified criteria and sort using the specified key.
 
-        Parameters:
-            table_name (str) : name of the table
-        Optional parameters:
-            criteria (dict) : conditions to be met
-            order_by (str) : key used to sort the entries
+        Args:
+            table_name: Name of the table
+        Optional Args:
+            criteria: A dict mapping column name to its corresponding value
+            order_by: The key used to sort the entries
         """
         statement = f"""
             SELECT * FROM {table_name}
